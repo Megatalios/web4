@@ -18,6 +18,11 @@ class Client(db.Model):
         return '<Client %r>' % self.id
 
 
+@app.route('/all_clients')
+def clients():
+    clients_ = Client.query.order_by(Client.id).all()
+    return render_template("database.html", clients_=clients_)
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -33,6 +38,10 @@ def contacts():
     return render_template("contacts.html")
 
 
+@app.route('/success')
+def success():
+    return render_template("success.html")
+
 @app.route('/feedback', methods=["POST", "GET"])
 def feedback():
     if request.method == "POST":
@@ -45,10 +54,9 @@ def feedback():
         try:
             db.session.add(client)
             db.session.commit()
-            return redirect('/')
-
+            return redirect('/success')
         except:
-            return "При добавлении ваших данныхп произошла ошибка"
+            return "При добавлении ваших данных произошла ошибка"
     else:
         return render_template("feedback.html")
 
