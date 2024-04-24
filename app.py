@@ -7,6 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 db = SQLAlchemy(app)
 
 
+#Этот класс для базы данных нужен
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
@@ -18,10 +19,26 @@ class Client(db.Model):
         return '<Client %r>' % self.id
 
 
+
+# Здесь маршруты и их обработчики
 @app.route('/all_clients')
 def clients():
     clients_ = Client.query.order_by(Client.id).all()
     return render_template("database.html", clients_=clients_)
+
+@app.route('/all_clients/aaa')
+def one_client():
+    return render_template("database.html")
+    #client = Client.query.get_or_404(id)
+    # return render_template("database.html", clients_={
+    #     'id': client.id,
+    #     'name': client.name,
+    #     'mail': client.mail,
+    #     'phone_number': client.phone_number,
+    #     'message': client.message
+    #     # Добавьте сюда другие атрибуты, если необходимо
+    # })
+
 
 @app.route('/')
 def index():
